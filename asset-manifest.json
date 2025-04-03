@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/test-extension-field/static/css/main.fc5c2c69.css",
+    "main.js": "/test-extension-field/static/js/main.8de18d62.js",
+    "index.html": "/test-extension-field/index.html",
+    "main.fc5c2c69.css.map": "/test-extension-field/static/css/main.fc5c2c69.css.map",
+    "main.8de18d62.js.map": "/test-extension-field/static/js/main.8de18d62.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fc5c2c69.css",
+    "static/js/main.8de18d62.js"
+  ]
+}
