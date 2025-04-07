@@ -1,5 +1,4 @@
 import "./styles/styles.css";
-import { useFieldExtension } from "microcms-field-extension-react";
 import { useEffect, useState } from "react";
 import RecipeTable from "./components/RecipeTable";
 
@@ -17,12 +16,9 @@ export interface Recipe {
 }
 
 export default function App() {
+  const [id, setId] = useState<string>("");
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  const { data, sendMessage } = useFieldExtension<Recipe | null>(null, {
-    origin,
-    height: 465 // microcms-field-extension-reactを使う場合は高さの変更が不可、id等保持してpostMessageする必要あり
-  });
 
   // mock取得
   useEffect(() => {
@@ -31,9 +27,51 @@ export default function App() {
       .then(data => setRecipes(data))
   }, []);
 
+  // Iframe初期化
+  useEffect(() => {
+    window.addEventListener("message", (e) => {
+      if (
+        e.isTrusted === true &&
+        e.data.action === "MICROCMS_GET_DEFAULT_DATA"
+      ) {
+        console.log("Iframe初期化");
+        setId(e.data.id);
+        setSelectedRecipe(e.data.message);
+        console.log(e.data);
+      }
+    });
+  }, []);
+
+  // Iframeスタイル変更
+  useEffect(() => {
+    console.log("Iframeスタイル変更:", selectedRecipe ? 270 : 430);
+    window.parent.postMessage(
+      {
+        id: id,
+        action: "MICROCMS_UPDATE_STYLE",
+        message: {
+          height: selectedRecipe ? 270 : 430,
+        },
+      },
+      origin
+    );
+  }, [selectedRecipe]);
+
+  // レシピ選択
   const handleSelectRecipe = (selectedRecipe: Recipe | null) => {
-    sendMessage({ data: selectedRecipe });
+    console.log("レシピ選択:", selectedRecipe);
+    setSelectedRecipe(selectedRecipe);
+    window.parent.postMessage(
+      {
+        id: id,
+        action: "MICROCMS_POST_DATA",
+        message: {
+          data: selectedRecipe,
+        },
+      },
+      origin
+    );
   };
 
-  return <RecipeTable recipes={recipes} selectedRecipe={data} onSelectRecipe={handleSelectRecipe} />;
+  return <RecipeTable recipes={recipes} selectedRecipe={selectedRecipe} onSelectRecipe={handleSelectRecipe} />;
 }
