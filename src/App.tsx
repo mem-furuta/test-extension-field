@@ -27,15 +27,18 @@ export default function App() {
       .then(data => setRecipes(data))
   }, []);
 
-  // const { data, sendMessage } = useFieldExtension("#00ff00", { origin });
-  // const onChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
-  //   sendMessage({ data: e.target.value });
-  // };
+  const { data, sendMessage } = useFieldExtension("#00ff00", { 
+    origin,
+    height: 500
+  });
+  const onChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
+    sendMessage({ data: e.target.value });
+  };
 
   return (
     <div>
-      {/* <div>React example</div>
-      <input type="color" value={data as string} onChange={onChangeColor} /> */}
+      <div>React example</div>
+      <input type="color" value={data as string} onChange={onChangeColor} />
       <RecipeTable recipes={recipes} selectedRecipe={selectedRecipe} setSelectedRecipe={setSelectedRecipe} />
     </div>
   );
