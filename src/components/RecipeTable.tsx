@@ -1,4 +1,4 @@
-import React, { useEffect, useState, MouseEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/RecipeTable.css';
 import { Recipe } from '../App';
 
@@ -53,53 +53,59 @@ const RecipeTable: React.FC<RecipeTableProps> = ({ recipes, selectedRecipe, onSe
         )}
       </div>
 
-      <div className="search-area">
-        <input
-          type="text"
-          value={searchText}
-          onChange={e => setSearchText(e.target.value)}
-          placeholder="レシピを検索"
-        />
-        <button onClick={handleSearch}>検索</button>
-      </div>
+      {selectedRecipe ? (
+        <></>
+      ) : (
+        <>
+          <div className="search-area">
+            <input
+              type="text"
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
+              placeholder="レシピを検索"
+            />
+            <button onClick={handleSearch}>検索</button>
+          </div>
 
-      <div className="recipe-table">
-        <div className="recipe-table-header">
-          <div className="header-select">選択</div>
-          <div className="header-id header-sortable">ID</div>
-          <div className="header-name header-sortable">名前</div>
-          <div className="header-image">画像</div>
-          <div className="header-link">リンク</div>
-        </div>
-        <div className="recipe-table-body">
-          {filteredRecipes.map((recipe, index) => (
-            <div className="recipe-table-row" key={recipe.id}>
-              <div className="recipe-cell cell-select">
-                <button
-                  className="select-button"
-                  onClick={() => onSelectRecipe(recipe)}
-                  disabled={!!selectedRecipe}
-                >
-                  選択
-                </button>
-              </div>
-              <div className="recipe-cell cell-id">{recipe.id}</div>
-              <div
-                className="recipe-cell cell-name"
-                title={recipe.name}
-              >{recipe.name}</div>
-              <div className="recipe-cell cell-image">
-                <img src={recipe.image} alt={recipe.name} className="recipe-thumbnail" />
-              </div>
-              <div className="recipe-cell cell-link">
-                <a href={recipe.url} target="_blank" rel="noopener noreferrer">
-                  開く
-                </a>
-              </div>
+          <div className="recipe-table">
+            <div className="recipe-table-header">
+              <div className="header-select">選択</div>
+              <div className="header-id header-sortable">ID</div>
+              <div className="header-name header-sortable">名前</div>
+              <div className="header-image">画像</div>
+              <div className="header-link">リンク</div>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="recipe-table-body">
+              {filteredRecipes.map((recipe, index) => (
+                <div className="recipe-table-row" key={recipe.id}>
+                  <div className="recipe-cell cell-select">
+                    <button
+                      className="select-button"
+                      onClick={() => onSelectRecipe(recipe)}
+                      disabled={!!selectedRecipe}
+                    >
+                      選択
+                    </button>
+                  </div>
+                  <div className="recipe-cell cell-id">{recipe.id}</div>
+                  <div
+                    className="recipe-cell cell-name"
+                    title={recipe.name}
+                  >{recipe.name}</div>
+                  <div className="recipe-cell cell-image">
+                    <img src={recipe.image} alt={recipe.name} className="recipe-thumbnail" />
+                  </div>
+                  <div className="recipe-cell cell-link">
+                    <a href={recipe.url} target="_blank" rel="noopener noreferrer">
+                      開く
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

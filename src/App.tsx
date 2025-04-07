@@ -1,6 +1,6 @@
 import "./styles/styles.css";
 import { useFieldExtension } from "microcms-field-extension-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeTable from "./components/RecipeTable";
 
 // CHANGEME
@@ -18,6 +18,12 @@ export interface Recipe {
 
 export default function App() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [height, setHeight] = useState(430);
+
+  const { data, sendMessage } = useFieldExtension<Recipe | null>(null, {
+    origin: origin,
+    height: height
+  });
 
   // mock取得
   useEffect(() => {
@@ -26,10 +32,9 @@ export default function App() {
       .then(data => setRecipes(data))
   }, []);
 
-  const { data, sendMessage } = useFieldExtension<Recipe | null>(null, { 
-    origin,
-    height: 500
-  });
+  useEffect(() => {
+    setHeight(data ? 270 : 430);
+  }, [data]);
 
   const handleSelectRecipe = (selectedRecipe: Recipe | null) => {
     sendMessage({ data: selectedRecipe });
