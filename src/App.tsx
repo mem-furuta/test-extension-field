@@ -18,7 +18,6 @@ export interface Recipe {
 
 export default function App() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   // mock取得
   useEffect(() => {
@@ -27,19 +26,14 @@ export default function App() {
       .then(data => setRecipes(data))
   }, []);
 
-  const { data, sendMessage } = useFieldExtension("#00ff00", { 
+  const { data, sendMessage } = useFieldExtension<Recipe | null>(null, { 
     origin,
     height: 500
   });
-  const onChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
-    sendMessage({ data: e.target.value });
+
+  const handleSelectRecipe = (selectedRecipe: Recipe | null) => {
+    sendMessage({ data: selectedRecipe });
   };
 
-  return (
-    <div>
-      <div>React example</div>
-      <input type="color" value={data as string} onChange={onChangeColor} />
-      <RecipeTable recipes={recipes} selectedRecipe={selectedRecipe} setSelectedRecipe={setSelectedRecipe} />
-    </div>
-  );
+  return <RecipeTable recipes={recipes} selectedRecipe={data} onSelectRecipe={handleSelectRecipe} />;
 }

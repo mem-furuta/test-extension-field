@@ -5,26 +5,16 @@ import { Recipe } from '../App';
 interface RecipeTableProps {
   recipes: Recipe[];
   selectedRecipe: Recipe | null;
-  setSelectedRecipe: React.Dispatch<React.SetStateAction<Recipe | null>>;
+  onSelectRecipe: (selectedRecipe: Recipe | null) => void
 }
 
-const RecipeTable: React.FC<RecipeTableProps> = ({ recipes, selectedRecipe, setSelectedRecipe }) => {
+const RecipeTable: React.FC<RecipeTableProps> = ({ recipes, selectedRecipe, onSelectRecipe }) => {
   const [searchText, setSearchText] = useState('');
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
   useEffect(() => {
     setFilteredRecipes(recipes);
   }, [recipes]);
-
-  const handleSelectRecipe = (recipe: Recipe) => {
-    if (!selectedRecipe) {
-      setSelectedRecipe(recipe);
-    }
-  };
-
-  const handleDeselectRecipe = () => {
-    setSelectedRecipe(null);
-  };
 
   const handleSearch = () => {
     const text = searchText.toLowerCase();
@@ -54,7 +44,7 @@ const RecipeTable: React.FC<RecipeTableProps> = ({ recipes, selectedRecipe, setS
             <div className="selected-row">
               <div className="selected-cell cell-tags">タグ: {selectedRecipe.tags.join(', ')}</div>
             </div>
-            <button className="deselect-button" onClick={handleDeselectRecipe}>選択解除</button>
+            <button className="deselect-button" onClick={() => onSelectRecipe(null)}>選択解除</button>
           </div>
         ) : (
           <div className="selected-recipe-panel">
@@ -87,7 +77,7 @@ const RecipeTable: React.FC<RecipeTableProps> = ({ recipes, selectedRecipe, setS
               <div className="recipe-cell cell-select">
                 <button
                   className="select-button"
-                  onClick={() => handleSelectRecipe(recipe)}
+                  onClick={() => onSelectRecipe(recipe)}
                   disabled={!!selectedRecipe}
                 >
                   選択
