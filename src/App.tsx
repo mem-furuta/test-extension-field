@@ -18,11 +18,10 @@ export interface Recipe {
 
 export default function App() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [height, setHeight] = useState(430);
 
   const { data, sendMessage } = useFieldExtension<Recipe | null>(null, {
-    origin: origin,
-    height: height
+    origin,
+    height: 465 // microcms-field-extension-reactを使う場合は高さの変更が不可、id等保持してpostMessageする必要あり
   });
 
   // mock取得
@@ -31,10 +30,6 @@ export default function App() {
       .then(response => response.json())
       .then(data => setRecipes(data))
   }, []);
-
-  useEffect(() => {
-    setHeight(data ? 270 : 430);
-  }, [data]);
 
   const handleSelectRecipe = (selectedRecipe: Recipe | null) => {
     sendMessage({ data: selectedRecipe });
